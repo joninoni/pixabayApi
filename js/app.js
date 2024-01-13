@@ -15,6 +15,46 @@ function validarFormulario(e){
         mostrarAlerta("Agrega un termino de busqueda");
         return;
     }
+    obtenerImagenes(terminoBusqueda);
+}
+
+function obtenerImagenes(termino){
+
+    terminoFormateado=termino.replace(/\s/g, '+');//para poder tener un termino de varias palabras ejemplo:casas azules;
+    const key=`41208820-8ef12a29f5aeb69c4e14f36cc`;
+
+    //key hace referencia a nuestra propia apikey
+    //& concatena un termino de busqueda por lo cual podemos tener varios 
+    const url=`https://pixabay.com/api/?key=${key}&q=${terminoFormateado}`;
+   
+    fetch(url)
+        .then(respuesta => respuesta.json())
+        .then(resultado => mostrarImagenes(resultado.hits))
+}
+
+function mostrarImagenes(imagenes){
+    imagenes.forEach(imagen => {
+        const {previewURL,likes,views,largeImageURL} = imagen;
+        resultado.innerHTML+=
+        `
+            <di class="w-1/2 md:w-1/3 lg:w-1/4 mb-4">
+                <div class="bg-white">
+                    <img class="w-full" src="${previewURL}">
+
+                    <div class="p-4">
+                        <p class="font-bold">${likes} <span class="font-light">Me Gusta</span></p>
+                        <p class="font-bold">${views} <span class="font-light">Veces Vista</span></p>
+                        <a
+                            class="block w-full bg-blue-800 hover:bg-blue-500 text-white uppercase font-bold text-center rounded mt-5 p-1"
+                            href="${largeImageURL}" target="_blank" rel="noopener noreferrer"
+                        >
+                            Ver Imagen
+                        </a>
+                    </div>
+                </div>
+            </di>
+        `
+    });
 }
 
 function mostrarAlerta(mensaje){

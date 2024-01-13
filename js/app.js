@@ -24,8 +24,9 @@ function obtenerImagenes(termino){
     const key=`41208820-8ef12a29f5aeb69c4e14f36cc`;
 
     //key hace referencia a nuestra propia apikey
-    //& concatena un termino de busqueda por lo cual podemos tener varios 
-    const url=`https://pixabay.com/api/?key=${key}&q=${terminoFormateado}`;
+    //& concatena un termino de busqueda por lo cual podemos tener varios
+    //per_page indica el numero de imagenes que queremos obtener
+    const url=`https://pixabay.com/api/?key=${key}&q=${terminoFormateado}&per_page=100`;
    
     fetch(url)
         .then(respuesta => respuesta.json())

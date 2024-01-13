@@ -33,6 +33,9 @@ function obtenerImagenes(termino){
 }
 
 function mostrarImagenes(imagenes){
+
+    limpiarHtml()
+
     imagenes.forEach(imagen => {
         const {previewURL,likes,views,largeImageURL} = imagen;
         resultado.innerHTML+=
@@ -71,5 +74,11 @@ function mostrarAlerta(mensaje){
         setTimeout(() => {
             alerta.remove();
         }, 2000);
+    }
+}
+
+function limpiarHtml(){
+    while (resultado.firstChild) {
+        resultado.removeChild(resultado.firstChild);
     }
 }

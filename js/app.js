@@ -36,8 +36,7 @@ function obtenerImagenes(){
     fetch(url)
         .then(respuesta => respuesta.json())
         .then(resultado =>{
-            totalPaginas=calcularPaginas(resultado.totalHits)
-            
+            totalPaginas=calcularPaginas(resultado.totalHits)     
             mostrarImagenes(resultado.hits)
         })
 }
@@ -54,6 +53,9 @@ function calcularPaginas(total){
 
 function mostrarImagenes(imagenes){
     limpiarHtml(resultado);
+    if (imagenes.length===0) {
+        mostrarAlerta("No hay resultados intenta otro termino de busqueda")
+    }
     imagenes.forEach(imagen => {
         const {previewURL,likes,views,largeImageURL} = imagen;
         resultado.innerHTML+=
@@ -75,22 +77,34 @@ function mostrarImagenes(imagenes){
                 </div>
             </di>
         `
-    });  
+    });
+    limpiarHtml(paginacionDiv);
     imprimirGenerador();  
 }
 
 function imprimirGenerador(){
-    limpiarHtml(paginacionDiv)
     iterador=crearPaginador(totalPaginas);//numero de paginas que va haber;
     while (true) {
         const {done,value} =iterador.next();
+
         if(done)return
         const boton =document.createElement("a");
         boton.href="#"
         boton.dataset.pagina=value;
         boton.textContent=value;
-        boton.classList.add("siguiente","bg-yellow-400","px-4","py-1","mr-2","font-bold","mb-4","rounded")
-        paginacionDiv.appendChild(boton);ñ
+        boton.classList.add("siguiente","bg-yellow-400","px-4","py-1","mr-2","font-bold","mb-4","rounded");
+        boton.onclick=function(){
+            paginaActual=value;
+            obtenerImagenes()
+        }
+
+        const botonActual=parseInt(boton.dataset.pagina);//va a mostrar en verde el boton de la pagina donde nos ubicamos
+        if (botonActual===paginaActual) {
+            boton.classList.remove("bg-yellow-400");
+            boton.classList.add("bg-green-400")
+        }
+
+        paginacionDiv.appendChild(boton);
     }
     
 }
